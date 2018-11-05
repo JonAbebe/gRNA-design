@@ -1,0 +1,401 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 24 10:01:23 2018
+
+@author: mac
+"""
+
+'''Exon45 
+1	taaaaagaca tggggcttca tttttgtttt gcctttttgg tatcttacag GAACTCCAGG ATGGCATTGG GCAGCGGCAA ACTGTTGTCA GAACATTGAA
+101	TGCAACTGGG GAAGAAATAA TTCAGCAATC CTCAAAAACA GATGCCAGTA TTCTACAGGA AAAATTGGGA AGCCTGAATC TGCGGTGGCA GGAGGTCTGC
+201	AAACAGCTGT CAGACAGAAA AAAGAGgtag ggcgacagat ctaataggaa tgaaaacatt ttagcagact ttttaa
+
+'''
+
+'''Exon44
+1	gttttacata atccatctat ttttcttgat ccatatgctt ttacctgcag GCGATTTGAC AGATCTGTTG AGAAATGGCG GCGTTTTCAT TATGATATAA
+101	AGATATTTAA TCAGTGGCTA ACAGAAGCTG AACAGTTTCT CAGAAAGACA CAAATTCCTG AGAATTGGGA ACATGCTAAA TACAAATGGT ATCTTAAGgt
+201	aagtctttga tttgtttttt cgaaattgta tttatcttca gcacatct
+'''
+
+'''Exon53
+
+1	cctccagact agcatttact actatatatt tatttttcct tttattctag TTGAAAGAAT TCAGAATCAG TGGGATGAAG TACAAGAACA CCTTCAGAAC
+101	CGGAGGCAAC AGTTGAATGA AATGTTAAAG GATTCAACAC AATGGCTGGA AGCTAAGGAA GAAGCTGAGC AGGTCTTAGG ACAGGCCAGA GCCAAGCTTG
+201	AGTCATGGAA GGAGGGTCCC TATACAGTAG ATGCAATCCA AAAGAAAATC ACAGAAACCA AGgttagtat caaagatacc tttttaaaat aaaatactgg
+301	ttacatttga ta
+'''
+
+'''
+actatatatttatttttccttttattctag
+TTGAAAGAATTCAGAATCAGTGGGATGAAGTACAAGAACACCTTCAGAACCGGAGGCAACAGTTGAATGAAATGTTAAAGGATTCAA
+CACAATGGCTGGAAGCTAAGGAAGAAGCTGAGCAGGTCTTAGGACAGGCCAGAGCCAAGCTTGAGTCATGGAAGGAGGGTCCCTATA
+CAGTAGATGCAATCCAAAAGAAAATCACAGAAACCAAGgttagtatcaaagatacctttttaaaataaaatact
+'''
+import re 
+from functools import reduce
+from Bio.Seq import Seq
+
+def input_edit(seq):
+    ''''Takes an input of sequence and gets rid of the numbers, tabs, newlines
+    and spaces, returns a continuous sequence
+    '''
+    sequence = ''.join([i for i in seq if i.isnumeric() != True])
+    return sequence.replace('\n','').replace('\t','').replace(' ','')
+
+'''
+complement = Seq(sequence)
+complement = str(complement.complement())
+reverse_complement = str(Seq(sequence).reverse_complement())
+
+sequence1 = {'top':sequence,'complement':complement,'reverse_complement':reverse_complement}
+'''
+def all_seqs(seq):
+    '''Returns the original, complement and reverse complement strands in one dictionary
+    '''
+    complement = Seq(seq)
+    complement = str(complement.complement())
+    reverse_complement = str(Seq(seq).reverse_complement())
+    return {'top':sequence,'complement':complement,'reverse_complement':reverse_complement}
+
+
+def all_sites(dict_of_seqs):
+    '''Retrieves the site of editing for all strands. Since acceptor and donor sites
+    are conserved this code finds the first capital letter indicating the start of an exon
+    and subtracts the location accordingly
+    '''
+    dic = {}
+    for k,v in dict_of_seqs.items():
+        if k == 'top':
+            location = [match.start() for match in re.finditer('[A-Z]',v)][0]
+            dic[k] = location - 2
+        if k == 'complement':
+            location = [match.start() for match in re.finditer('[A-Z]',v)][0]
+            dic[k] = location - 1
+        if k == 'reverse_complement':
+            location = [match.start() for match in re.finditer('[A-Z]',v)][0]
+            dic[k] = [location-1,location-2]
+    return dic
+        
+
+
+
+### Instead of making 3 seperate dictionaries and keeping them in a list,
+    ### make one dictionary and have new keys
+def possible_pams():
+    '''Makes all the potential pam locations according to specific nuclease
+    '''
+    from itertools import product
+    nucleo = ['A','T','C','G']
+    '''Returns a dictionary with each nuclease and possible pam sequences
+    '''
+    vqr_pam4 = []
+    xcas9_lst = []  
+    spcas9_lst = []     
+    pam_seqs = {}    
+    all_pams = []
+    pam_3 = map(''.join,product(nucleo,repeat = 3 ))
+    pam_4 = map(''.join,product(nucleo,repeat = 4 ))  
+    all_pams.extend(pam_3)
+    all_pams.extend(pam_4)    
+    for i in all_pams:
+        if len(i) == 4:
+            if i[1] == 'G' and i[2] == 'A': #NGAN #VQR
+                vqr_pam4.append(i)
+            if i[1] == 'G' and i[-1]=='G': #NGNG #VQR
+                vqr_pam4.append(i)
+        else:
+            if i[1] == 'G': #NGN #xcas9
+                xcas9_lst.append(i)
+            if i[1] == 'G' and i[2] == 'G': #NGG #spcas9
+                spcas9_lst.append(i)
+            if i[1] == 'A' and i[-1] == 'G': #NAG #spcas9
+                spcas9_lst.append(i)
+        pam_seqs['spcas9'] = spcas9_lst
+        pam_seqs['xcas9'] = xcas9_lst
+        pam_seqs['VQR'] = vqr_pam4
+    return pam_seqs
+
+
+
+def complement_pams_func(pams):
+    spcas9_lst = []
+    xcas9_lst = []
+    vqr_lst = []
+    complement_pams = {}
+    for i,j in pams.items():
+        for k in j:
+            if i == 'spcas9':
+                spcas9_lst.append(k[::-1].lower())
+            elif i == 'xcas9':
+                xcas9_lst.append(k[::-1].lower())
+            elif i == 'VQR':
+                vqr_lst.append(k[::-1].lower())
+        complement_pams['spcas9'] = spcas9_lst
+        complement_pams['xcas9'] = xcas9_lst
+        complement_pams['VQR'] = vqr_lst
+    return complement_pams
+        
+
+def pam_indx(seq,pams,pams_complement):
+    dicti = {}
+    dictp = {}
+    for k,v in seq.items():
+        indx = []
+        indxp = []
+        if k != 'complement':
+            for key,value in pams.items():
+                for pam in value:
+                    indx.append([i for i in range(len(v)) if v.startswith(pam, i)])
+                    indxp.append(pam)
+        else:
+            for key,value in pams_complement.items():
+                for pam in value:
+                    indxp.append(pam)
+                    indx.append([i for i in range(len(v)) if v.startswith(pam, i)])
+                #print(key,sum(indx,[]))
+        #dictp[k] = indxp
+        dicti[k] = sum(indx,[])
+        #dicti[k] = indx        
+    return dicti
+
+
+
+def filter_location(sites,pam_indxs):
+    final = dict()
+    for k,v in pam_indxs.items(): 
+        locations = set()
+        if k != 'complement':
+            for val in v:
+                val_1 = val-17
+                val_2 = val-12
+                if type(sites[k]) == list:
+                    for i in sites[k]:
+                        if val_1 <= i <= val_2:
+                            locations.add(val)
+                            #print(k,val)
+                else:
+                    if val_1 <= sites[k] <= val_2:
+                        locations.add(val)
+                        #print(k,val)
+        else: 
+            for val in v:
+                val_1 = val+17
+                val_2 = val+12
+                if val_2 <= sites[k] <= val_1:
+                    locations.add(val)
+                    #print(k,val-1)
+        final[k] = locations
+    return final
+        
+            
+
+def grna_design_compl(pam_locations,pam_seqs,complement_pams,seqs):
+    dict_comp = {}
+    for k,v in pam_locations.items():
+        for i in v:
+            if k == 'complement':
+                complement_pam = seqs['complement'][i-1:i+2]
+                complement_grna = seqs['complement'][i+2:i+22]
+                dict_comp[complement_pam] = complement_grna
+    return dict_comp
+
+
+def grna_design(pam_locations,pam_seqs,complement_pams,seqs):
+    dict_top = {}
+    dict_rev = {}
+    for k,v in pam_locations.items():
+        for i in v:
+            if k == 'top':
+                pam = seqs['top'][i:i+4]
+                grna = seqs['top'][i-20:i]
+                dict_top[pam] = grna
+            elif k == 'reverse_complement':
+                pam_r = seqs['reverse_complement'][i:i+4]
+                grna_r = seqs['reverse_complement'][i-20:i]
+                dict_rev[pam_r] = grna_r
+    return ([dict_top],[dict_rev])
+
+
+
+
+
+
+def get_nuclease(grna_dict,pam_seqs):
+    if type(grna_dict) == list:
+        grna_pams = grna_dict[0].keys()
+    else:
+        grna_pams = grna_dict.keys()
+    pam = {}
+    for i,j in pam_seqs.items():
+        lst = []
+        for pams in j:
+            y = [pams for i in grna_pams if pams in i]
+            if len(y) > 0:
+                lst.append(y[0])
+        pam[i] = lst 
+    return {k:v for k,v in pam.items() if len(v) != 0}
+
+
+def fix_pam(grna_dict,nuclease):
+    list_pams = set(reduce(lambda x, y: x + y, nuclease.values(), []))
+    if type(grna_dict) == list:
+        grna_dict = grna_dict[0]
+    dic = {}
+    for i in list_pams:
+        for k,v in grna_dict.items():
+            if i in k:
+                dic[i] = v
+    return dic
+                    
+
+
+def get_site(grna_dict):
+    count = 0
+    d = {}
+    for g in grna_dict.values():
+        site = []
+        x = [match.start() for match in re.finditer("[A-Z]", g)][0]
+        if g[x-2] == 'a':
+            site.append(x-2)
+            count+= 1        
+        if g[x-1] == 'c':
+            site.append(x-1)
+            count+= 1
+        d[g] = site
+    return d
+            
+        
+
+
+#ABE7.9 3:9
+#ABE7.10 3:7
+#BE3 3:9
+def print_off_target(base,lst):
+    if len(lst) >0:
+        for i in lst:
+            print('potential off targets(s): {}{}'.format(base,i+1))
+    else:
+        print('no off targets')
+    
+
+def off_target(site_base_editing,get_pam,get_nuclease,whole_seq):
+    for k,v in site_base_editing.items():
+        for j in v:
+            if k[j].lower() == 'a':
+                if 3<=j<7:
+                    indices = [i for i, x in enumerate(k.lower()) if x == k[j]]
+                    list1 = [x for x in indices if (3<=x<=7)]
+                    pam = list(get_pam.keys())[list(get_pam.values()).index(k)]
+                    nuclease = [nuclease for nuclease,pams in get_nuclease.items() if pam in pams]
+                    b = list(filter(lambda a: a != j, list1))
+                    print('Sequence:',whole_seq+'\n')
+                    print('Endonuclease(s):',*nuclease)
+                    print('PAM sequence:', pam)
+                    print('grna sequence:',k)
+                    print('Target site:',k[j]+str(j+1))
+                    print('Target window:',k[3:7])
+                    print('Base editor:', 'ABE7.10')
+                    print_off_target(k[j],b)
+                    print('\n') 
+                elif 3<=j<=9:
+                    indices = [i for i, x in enumerate(k.lower()) if x == k[j]]
+                    list1 = [x for x in indices if (3<=x<=9)]
+                    pam = list(get_pam.keys())[list(get_pam.values()).index(k)]
+                    nuclease = [nuclease for nuclease,pams in get_nuclease.items() if pam in pams]
+                    b = list(filter(lambda a: a != j, list1))
+                    print('Sequence:',whole_seq+'\n')
+                    print('Endonuclease(s):',*nuclease)
+                    print('PAM sequence:', pam)
+                    print('grna sequence:',k)
+                    print('Target site:',k[j]+str(j+1))
+                    print('Target window:',k[3:9])
+                    print('Base editor:', 'ABE7.9')
+                    print_off_target(k[j],b)
+                    print('\n') 
+            elif k[j].lower() == 'c':
+                if 3<=j<9:
+                    indices = [i for i, x in enumerate(k.lower()) if x == k[j]]
+                    list1 = [x for x in indices if (3<=x<=9)]
+                    b = list(filter(lambda a: a != j, list1))
+                    pam = list(get_pam.keys())[list(get_pam.values()).index(k)]
+                    nuclease = [nuclease for nuclease,pams in get_nuclease.items() if pam in pams]
+                    print('Sequence:',whole_seq+'\n')
+                    print('Endonuclease(s):',*nuclease)
+                    print('PAM sequence:',pam)
+                    print('grna sequence:',k)
+                    print('Target site:', k[j] + str(j+1))
+                    print('Target_window:',k[3:9])
+                    print('Base editor:', 'BE4')
+                    print_off_target(k[j],b)
+                    print('\n')         
+
+def off_target_comp(site_base_editing,get_pam,get_nuclease,whole_seq):
+    for k,v in site_base_editing.items():
+        for j in v:
+            if k[j].lower() == 'c':
+                if 11 <= j < 17:
+                    indices = [i for i,x in enumerate(k.lower()) if x == k[j]]
+                    list1 = [x for x in indices if (11<=x<17)]
+                    b = list(filter(lambda a: a != j, list1))
+                    pam = list(get_pam.keys())[list(get_pam.values()).index(k)]
+                    nuclease = [nuclease for nuclease,pams in get_nuclease.items() if pam in pams]
+                    print('Sequence:',whole_seq)
+                    print('Endonuclease(s):',*nuclease)
+                    print('PAM sequence:',pam)
+                    print('grna sequence:',k)
+                    print('Target site:', k[j] + str(j+1))
+                    print('Target_window:',k[11:17])
+                    print('Base editor:', 'BE4')
+                    print_off_target(k[j],b)
+                    print('\n')
+
+seq = input('Enter a sequence: ')
+
+sequence = input_edit(seq)
+
+
+seqs = all_seqs(sequence)    
+
+sites = all_sites(seqs)
+    
+pam_seqs = possible_pams()
+
+complement_pams = complement_pams_func(pam_seqs)
+
+pam_indxs = pam_indx(seqs,pam_seqs,complement_pams)
+
+pam_locations = filter_location(sites,pam_indxs)  
+              
+
+grna_comp = grna_design_compl(pam_locations,pam_seqs,complement_pams,seqs)        
+grna_top = grna_design(pam_locations,pam_seqs,complement_pams,seqs)[0]
+grna_rev = grna_design(pam_locations,pam_seqs,complement_pams,seqs)[1]
+
+
+pam_top = get_nuclease(grna_top,pam_seqs)
+pam_rev = get_nuclease(grna_rev,pam_seqs)
+pam_comp = get_nuclease(grna_comp,complement_pams)
+
+
+pam_grna_top = fix_pam(grna_top,pam_top)
+pam_grna_comp = fix_pam(grna_comp,pam_comp)
+pam_grna_rev = fix_pam(grna_rev,pam_rev)
+
+
+
+site_for_editing_rev = get_site(pam_grna_rev)
+site_for_editing_top = get_site(pam_grna_top)
+site_for_editing_comp = get_site(pam_grna_comp)
+
+
+print('****Top strand****\n')
+
+off_target(site_for_editing_top,pam_grna_top,pam_top,seqs['top'])
+
+print('****complement strand****\n')
+off_target_comp(site_for_editing_comp,pam_grna_comp,pam_comp,seqs['complement'])
+
+print('****reverse complement strand****\n')
+off_target(site_for_editing_rev,pam_grna_rev,pam_rev,seqs['reverse_complement'])
