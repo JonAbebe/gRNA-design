@@ -1,0 +1,65 @@
+import pandas as pd
+import numpy as np
+
+#Set path name
+file = '/Users/mac/Downloads/TADind_CTCFfinal_overlap_3.bed'
+file = '/Users/mac/Downloads/120_orientation_count.bed'
+
+file = '/Users/mac/Downloads/150_CTCF_CTCF_orientation_overlap.bed'
+#Reading the file into a list, spliting by tabes and taking away new lines
+lst_overlap = []
+with open(file) as f:
+    for line in f:
+        lst_overlap.append(line.strip('\n').split('\t'))
+
+#Creating a dataframe with values of lst_overlap
+df_overlaps = pd.DataFrame(data = lst_overlap)
+
+####
+colnames = ['chromosome','repeat','tad_start','tad_rev','orientation','f_count','r_count']
+df_overlaps.columns = colnames
+
+
+#Setting column names
+colnames = ['chromosome','tad_start','tad_end','chromo_repeat','chromosome2','ctcf_start','ctcf_end','mac_peak','peak_val','orientation','zero']
+
+#Assigning column names to dataframe columns
+df_overlaps.columns = colnames
+
+#Dropping irrelevant columns 
+df_overlaps = df_overlaps.drop(['chromosome2','ctcf_start','ctcf_end','mac_peak','peak_val','zero'],axis=1)
+
+
+#Setting the new index
+df_overlaps.set_index('chromosome',inplace = True)
+
+#Getting each individual chromosome
+chromosomes = set(list(df_overlaps.index))
+
+
+lst = []
+
+for i in chromosomes:
+    #iterate through all the overlaps
+    test = df_overlaps.ix[i]
+    #Computing frequency table across chromo_repeats and orientation
+    test_sum = pd.crosstab(test.chromo_repeat,test.orientation) 
+    test_sum.index = test_sum.index.map(int) #Change all index to ints
+    #Sorting the index
+    test_sum = test_sum.sort_index()
+    #Collapsing the repeated TAD boundaries
+    y = test.drop_duplicates(subset=['chromo_repeat'], keep='first')
+    #Setting a new index
+    test_sum = test_sum.set_index(y.index)
+    #Create new columns with the counts for forward and reverse
+    y['Forward_count'] = test_sum['Forward']
+    y['Reverse_count'] = test_sum['Reverse']
+    #Append to the list
+    lst.append(y)
+
+#Combine all the values for each chromosome
+whole_ = pd.concat(lst)
+#Get rid of values with 'NoMotifMatch'
+whole_ = whole_[whole_.orientation != 'NoMotifMatch']
+#Write to a bed file
+whole_.to_csv('/Users/mac/Downloads/forward_reverse_headers.bed', sep='\t')
