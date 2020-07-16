@@ -1,3 +1,5 @@
+##Can delete this script or make a miscellaneous directory
+
 import pandas as pd
 import numpy as np
 
@@ -61,5 +63,5 @@ for i in chromosomes:
 whole_ = pd.concat(lst)
 #Get rid of values with 'NoMotifMatch'
 whole_ = whole_[whole_.orientation != 'NoMotifMatch']
-#Write to a bed file
+#Write to a bed file 
 whole_.to_csv('/Users/mac/Downloads/forward_reverse_headers.bed', sep='\t')
