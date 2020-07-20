@@ -331,19 +331,6 @@ def off_target(site_base_editing, get_pam, get_nuclease, whole_seq):
                             'target': k[j] + str(j + 1), 'target_window': k[3:9], 'Base_editor': 'BE4',
                             'offtarget': print_off_target(k[j], b)}
 
-
-# =============================================================================
-#                     print('Sequence:',whole_seq+'\n')
-#                     print('Endonuclease(s):',*nuclease)
-#                     print('PAM sequence:',pam)
-#                     print('grna sequence:',k)
-#                     print('Target site:', k[j] + str(j+1))
-#                     print('Target_window:',k[3:9])
-#                     print('Base editor:', 'BE4')
-#                     print_off_target(k[j],b)
-#                     print('\n')
-#
-# =============================================================================
 def off_target_comp(site_base_editing, get_pam, get_nuclease, whole_seq):
     for k, v in site_base_editing.items():
         for j in v:
