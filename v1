@@ -67,7 +67,7 @@ def all_seqs(seq):
 def all_sites(dict_of_seqs):
     '''Retrieves the site of editing for all strands. Since acceptor and donor sites
     are conserved this code finds the first capital letter indicating the start of an exon
-    and subtracts the location accordingly
+    and subtracts the location accordingly..
     '''
     dic = {}
     for k, v in dict_of_seqs.items():
