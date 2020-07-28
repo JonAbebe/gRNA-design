@@ -10,7 +10,6 @@ Created on Mon Sep 24 10:01:23 2018
 1	taaaaagaca tggggcttca tttttgtttt gcctttttgg tatcttacag GAACTCCAGG ATGGCATTGG GCAGCGGCAA ACTGTTGTCA GAACATTGAA
 101	TGCAACTGGG GAAGAAATAA TTCAGCAATC CTCAAAAACA GATGCCAGTA TTCTACAGGA AAAATTGGGA AGCCTGAATC TGCGGTGGCA GGAGGTCTGC
 201	AAACAGCTGT CAGACAGAAA AAAGAGgtag ggcgacagat ctaataggaa tgaaaacatt ttagcagact ttttaa
-
 '''
 
 '''Exon44
@@ -44,7 +43,6 @@ def input_edit(seq):
     '''
     sequence = ''.join([i for i in seq if i.isnumeric() != True])
     return sequence.replace('\n', '').replace('\t', '').replace(' ', '').replace('\r','')
-
 
 '''
 complement = Seq(sequence)
