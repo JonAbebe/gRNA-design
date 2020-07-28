@@ -398,43 +398,4 @@ off_target_comp(site_for_editing_comp, pam_grna_comp, pam_comp, seqs['complement
 
 print('****reverse complement strand****\n')
 off_target(site_for_editing_rev, pam_grna_rev, pam_rev, seqs['reverse_complement'])
-
 '''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
