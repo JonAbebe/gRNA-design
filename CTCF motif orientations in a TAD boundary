@@ -36,6 +36,7 @@ df_overlaps = df_overlaps.drop(['chromosome2','ctcf_start','ctcf_end','mac_peak'
 df_overlaps.set_index('chromosome',inplace = True)
 
 #Getting each individual chromosome
+
 chromosomes = set(list(df_overlaps.index))
 
 
