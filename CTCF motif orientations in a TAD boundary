@@ -2,7 +2,6 @@
 
 import pandas as pd
 import numpy as np
-
 #Set path name
 file = '/Users/mac/Downloads/TADind_CTCFfinal_overlap_3.bed'
 file = '/Users/mac/Downloads/120_orientation_count.bed'
