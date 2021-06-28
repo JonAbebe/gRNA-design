@@ -20,7 +20,6 @@ df_overlaps = pd.DataFrame(data = lst_overlap)
 colnames = ['chromosome','repeat','tad_start','tad_rev','orientation','f_count','r_count']
 df_overlaps.columns = colnames
 
-
 #Setting column names
 colnames = ['chromosome','tad_start','tad_end','chromo_repeat','chromosome2','ctcf_start','ctcf_end','mac_peak','peak_val','orientation','zero']
 
