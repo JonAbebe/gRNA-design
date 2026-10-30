@@ -79,10 +79,18 @@ in its own commit, when a change is meant to alter results.
 
 ## Relation to the original script
 
-The original script is kept at [legacy/v1_original.py](legacy/v1_original.py)
-for comparison only; nothing imports it. It could not be run as it stood (its
-pipeline was commented out), and it had three behavioural problems that the
-rewrite fixes:
+The original script is kept on the `legacy` branch, under
+`legacy/v1_original.py`, together with `legacy/capture_baseline.py`, which
+replays its pipeline so its output can be compared with this one:
+
+```bash
+git show legacy:legacy/v1_original.py     # read it without switching branch
+git checkout legacy                       # or check the branch out
+```
+
+It is kept for comparison only; nothing here imports it. It could not be run
+as it stood (its pipeline was commented out), and it had three behavioural
+problems that the rewrite fixes:
 
 - **It reported only one candidate per strand.** Each analysis function
   returned from inside its loop, discarding the rest. The example exons yield
