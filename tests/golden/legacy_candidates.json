@@ -1,0 +1,94 @@
+{
+  "exon44": [
+    {
+      "editor": "ABE7.10",
+      "guide": "acttacCTTAAGATACCATT",
+      "offtargets": [],
+      "strand": "reverse_complement",
+      "target": "a5"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tgcagGCGATTTGACAGATC",
+      "offtargets": [],
+      "strand": "top",
+      "target": "a4"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "ttacctgcagGCGATTTGAC",
+      "offtargets": [],
+      "strand": "top",
+      "target": "a9"
+    }
+  ],
+  "exon45": [
+    {
+      "editor": "BE4",
+      "guide": "aaaaccatagaatgtcCTTG",
+      "offtargets": [
+        "c17"
+      ],
+      "strand": "complement",
+      "target": "c16"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "ccctacCTCTTTTTTCTGTC",
+      "offtargets": [],
+      "strand": "reverse_complement",
+      "target": "a5"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "gtcgccctacCTCTTTTTTC",
+      "offtargets": [],
+      "strand": "reverse_complement",
+      "target": "a9"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "atcttacagGAACTCCAGGA",
+      "offtargets": [
+        "a6"
+      ],
+      "strand": "top",
+      "target": "a8"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tcttacagGAACTCCAGGAT",
+      "offtargets": [
+        "a5"
+      ],
+      "strand": "top",
+      "target": "a7"
+    }
+  ],
+  "exon53": [
+    {
+      "editor": "ABE7.9",
+      "guide": "gatactaacCTTGGTTTCTG",
+      "offtargets": [
+        "a4",
+        "a7"
+      ],
+      "strand": "reverse_complement",
+      "target": "a8"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tattctagTTGAAAGAATTC",
+      "offtargets": [],
+      "strand": "top",
+      "target": "a7"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "ttattctagTTGAAAGAATT",
+      "offtargets": [],
+      "strand": "top",
+      "target": "a8"
+    }
+  ]
+}

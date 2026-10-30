@@ -1,0 +1,277 @@
+{
+  "exon44": [
+    {
+      "editor": "ABE7.9",
+      "guide": "ttacctgcagGCGATTTGAC",
+      "nucleases": {
+        "VQR": [
+          "AGAT"
+        ],
+        "xcas9": [
+          "AGA"
+        ]
+      },
+      "offtargets": [],
+      "pam": "AGAT",
+      "pam_index": 60,
+      "position": 8,
+      "strand": "top",
+      "target_base": "a",
+      "window": "cctgca"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tgcagGCGATTTGACAGATC",
+      "nucleases": {
+        "xcas9": [
+          "TGT"
+        ]
+      },
+      "offtargets": [],
+      "pam": "TGTT",
+      "pam_index": 65,
+      "position": 3,
+      "strand": "top",
+      "target_base": "a",
+      "window": "agGC"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "acttacCTTAAGATACCATT",
+      "nucleases": {
+        "xcas9": [
+          "TGT"
+        ]
+      },
+      "offtargets": [],
+      "pam": "TGTA",
+      "pam_index": 64,
+      "position": 4,
+      "strand": "reverse_complement",
+      "target_base": "a",
+      "window": "tacC"
+    },
+    {
+      "editor": "BE4",
+      "guide": "acttacCTTAAGATACCATT",
+      "nucleases": {
+        "xcas9": [
+          "TGT"
+        ]
+      },
+      "offtargets": [
+        6
+      ],
+      "pam": "TGTA",
+      "pam_index": 64,
+      "position": 5,
+      "strand": "reverse_complement",
+      "target_base": "c",
+      "window": "tacCTT"
+    }
+  ],
+  "exon45": [
+    {
+      "editor": "ABE7.9",
+      "guide": "atcttacagGAACTCCAGGA",
+      "nucleases": {
+        "spcas9": [
+          "TGG"
+        ],
+        "xcas9": [
+          "GGC",
+          "TGG"
+        ]
+      },
+      "offtargets": [
+        5
+      ],
+      "pam": "TGGC",
+      "pam_index": 61,
+      "position": 7,
+      "strand": "top",
+      "target_base": "a",
+      "window": "ttacag"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tcttacagGAACTCCAGGAT",
+      "nucleases": {
+        "xcas9": [
+          "GGC"
+        ]
+      },
+      "offtargets": [
+        4
+      ],
+      "pam": "GGCA",
+      "pam_index": 62,
+      "position": 6,
+      "strand": "top",
+      "target_base": "a",
+      "window": "taca"
+    },
+    {
+      "editor": "BE4",
+      "guide": "aaaaccatagaatgtcCTTG",
+      "nucleases": {
+        "spcas9": [
+          "gga"
+        ],
+        "xcas9": [
+          "gga"
+        ]
+      },
+      "offtargets": [
+        16
+      ],
+      "pam": "gga",
+      "pam_index": 32,
+      "position": 15,
+      "strand": "complement",
+      "target_base": "c",
+      "window": "atgtcC"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "gtcgccctacCTCTTTTTTC",
+      "nucleases": {
+        "xcas9": [
+          "TGT"
+        ]
+      },
+      "offtargets": [],
+      "pam": "TGTC",
+      "pam_index": 60,
+      "position": 8,
+      "strand": "reverse_complement",
+      "target_base": "a",
+      "window": "gcccta"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "ccctacCTCTTTTTTCTGTC",
+      "nucleases": {
+        "VQR": [
+          "TGAC"
+        ],
+        "xcas9": [
+          "TGA"
+        ]
+      },
+      "offtargets": [],
+      "pam": "TGAC",
+      "pam_index": 64,
+      "position": 4,
+      "strand": "reverse_complement",
+      "target_base": "a",
+      "window": "tacC"
+    },
+    {
+      "editor": "BE4",
+      "guide": "ccctacCTCTTTTTTCTGTC",
+      "nucleases": {
+        "VQR": [
+          "TGAC"
+        ],
+        "xcas9": [
+          "TGA"
+        ]
+      },
+      "offtargets": [
+        6,
+        8
+      ],
+      "pam": "TGAC",
+      "pam_index": 64,
+      "position": 5,
+      "strand": "reverse_complement",
+      "target_base": "c",
+      "window": "tacCTC"
+    }
+  ],
+  "exon53": [
+    {
+      "editor": "ABE7.9",
+      "guide": "ttattctagTTGAAAGAATT",
+      "nucleases": {
+        "spcas9": [
+          "CAG"
+        ],
+        "xcas9": [
+          "AGA"
+        ]
+      },
+      "offtargets": [],
+      "pam": "CAGA",
+      "pam_index": 61,
+      "position": 7,
+      "strand": "top",
+      "target_base": "a",
+      "window": "ttctag"
+    },
+    {
+      "editor": "ABE7.10",
+      "guide": "tattctagTTGAAAGAATTC",
+      "nucleases": {
+        "VQR": [
+          "AGAA"
+        ],
+        "xcas9": [
+          "AGA"
+        ]
+      },
+      "offtargets": [],
+      "pam": "AGAA",
+      "pam_index": 62,
+      "position": 6,
+      "strand": "top",
+      "target_base": "a",
+      "window": "tcta"
+    },
+    {
+      "editor": "ABE7.9",
+      "guide": "gatactaacCTTGGTTTCTG",
+      "nucleases": {
+        "VQR": [
+          "TGAT"
+        ],
+        "xcas9": [
+          "TGA"
+        ]
+      },
+      "offtargets": [
+        3,
+        6
+      ],
+      "pam": "TGAT",
+      "pam_index": 61,
+      "position": 7,
+      "strand": "reverse_complement",
+      "target_base": "a",
+      "window": "actaac"
+    },
+    {
+      "editor": "BE4",
+      "guide": "gatactaacCTTGGTTTCTG",
+      "nucleases": {
+        "VQR": [
+          "TGAT"
+        ],
+        "xcas9": [
+          "TGA"
+        ]
+      },
+      "offtargets": [
+        4,
+        9
+      ],
+      "pam": "TGAT",
+      "pam_index": 61,
+      "position": 8,
+      "strand": "reverse_complement",
+      "target_base": "c",
+      "window": "actaac"
+    }
+  ]
+}
